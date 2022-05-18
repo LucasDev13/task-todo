@@ -30,21 +30,21 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping(path = TaskUri.TASKS)
-    public ResponseEntity<?> getTasks(TaskDto taskDto, Pageable pageable, PersistentEntityResourceAssembler resourceAssembler){
+    public ResponseEntity<?> getTasks(TaskDto taskDto, Pageable pageable){
         log.info("TasksController: " + taskDto);
         var events = taskService.getTasks(pageable);
-        var resource = pagedResourcesAssembler.toModel(events, resourceAssembler);
+        var resource = pagedResourcesAssembler.toModel(events);
         return ResponseEntity.ok(resource);
     }
 
     @GetMapping(path = TaskUri.TASK)
-    public ResponseEntity<?> getTask(@PathVariable("id") Long taskId, Pageable pageable, PersistentEntityResourceAssembler resourceAssembler){
+    public ResponseEntity<?> getTask(@PathVariable("id") Long taskId){
         try {
             log.info("TasksController:::" + taskId);
             var task = taskService.getTask(taskId);
 
-            Link selfLink = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getTask(taskId, pageable, resourceAssembler)).withSelfRel();
-            Link allTasksLink = WebMvcLinkBuilder.linkTo( this.getClass() ).slash("/tasks").withRel("all tasks");
+            Link selfLink = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getTask(taskId)).withSelfRel();
+            Link allTasksLink = WebMvcLinkBuilder.linkTo( this.getClass() ).slash("/tasks").withRel("allTasks");
             EntityModel<Task> entityModel = EntityModel.of(task);
             entityModel.add(selfLink, allTasksLink);
 
@@ -55,17 +55,17 @@ public class TaskController {
     }
 
     @PostMapping(path = TaskUri.CREATE_TASK)
-    public ResponseEntity<?> createTask(@RequestBody TaskDto taskDto, Pageable pageable, PersistentEntityResourceAssembler resourceAssembler){
+    public ResponseEntity<?> createTask(@RequestBody TaskDto taskDto){
         log.info("TasksController:" + taskDto);
         Task events = taskService.saveTask(taskDto);
 
-        Link selfLink = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).createTask(taskDto, pageable, resourceAssembler)).withSelfRel();
-        Link allTasksLink = WebMvcLinkBuilder.linkTo( this.getClass() ).slash("/tasks").withRel("all tasks");
+        Link selfLink = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).createTask(taskDto)).withSelfRel();
+        Link allTasksLink = WebMvcLinkBuilder.linkTo( this.getClass() ).slash("/tasks").withRel("allTasks");
         EntityModel<Task> taskResource = EntityModel.of(events);
         taskResource.add(selfLink, allTasksLink);
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("CustomResponseHeader", "CustomValue");
-        return new ResponseEntity<EntityModel<Task>>(taskResource, responseHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<EntityModel<Task>>(responseHeaders, HttpStatus.CREATED);
     }
 }
