@@ -20,30 +20,30 @@ import org.springframework.test.context.ActiveProfiles;
 @RunWith(JUnitPlatform.class)
 public class TasksControllerIntegrationTest {
 
-    @Before
-    public void setup(){
-        RestAssured.baseURI = "http://localhost:8080";
-        RestAssured.port = 8080;
-    }
-
-    @Test
-    public void givenUrl_whenSuccessOnGetsResponseAndJsonHasRequiredKV_thenCorrect(){
-        get("/api/todo/tasks").then().statusCode(200);
-    }
-
-    @Test
-    public void givenUrl_whenSuccessOnGetsResponseAndJsonHasOneTask_thenCorrect(){
-        get("/api/todo/task/1").then().statusCode(200)
-                .assertThat().body("name",
-                        equalTo("name1"), "description",
-                        equalTo("Primeira tarefa"));
-    }
-
-    @Test
-    public void givenUrl_whenSuccessOnGetsResponseAndJsonHasTwoTask_thenCorrect(){
-        get("/api/todo/task/2").then().statusCode(200)
-                .assertThat().body("name",
-                        equalTo("name2"), "description",
-                        equalTo("Segunda tarefa"));
-    }
+//    @Before
+//    public void setup(){
+//        RestAssured.baseURI = "http://localhost:8080";
+//        RestAssured.port = 8080;
+//    }
+//
+//    @Test
+//    public void givenUrl_whenSuccessOnGetsResponseAndJsonHasRequiredKV_thenCorrect(){
+//        get("/api/todo/tasks").then().statusCode(200);
+//    }
+//
+//    @Test
+//    public void givenUrl_whenSuccessOnGetsResponseAndJsonHasOneTask_thenCorrect(){
+//        get("/api/todo/task/1").then().statusCode(200)
+//                .assertThat().body("name",
+//                        equalTo("name1"), "description",
+//                        equalTo("Primeira tarefa"));
+//    }
+//
+//    @Test
+//    public void givenUrl_whenSuccessOnGetsResponseAndJsonHasTwoTask_thenCorrect(){
+//        get("/api/todo/task/2").then().statusCode(200)
+//                .assertThat().body("name",
+//                        equalTo("name2"), "description",
+//                        equalTo("Segunda tarefa"));
+//    }
 }
